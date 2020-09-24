@@ -9,8 +9,10 @@ import java.util.HashMap;
 
 import com.dortwaredevs.bot.util.MessageUtil;
 
+import lombok.Getter;
 import net.dv8tion.jda.api.entities.Message;
 
+@Getter
 public class Config {
 	
 	private String configName;

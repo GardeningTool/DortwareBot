@@ -26,9 +26,9 @@ public class ConfigManager {
 	public String getConfigs() {
 		StringBuffer configs = new StringBuffer();
 		configs.append("Configs: ");
-		String[] configList = this.configs.keySet().toArray(new String[0]);
+		Config[] configList = this.configs.values().toArray(new Config[0]);
 		for (int i = 0; i < configList.length; i++) {
-			configs.append(configList[i]);
+			configs.append(configList[i].getConfigName());
 			if (i < configList.length) configs.append(", ");
 		}
 		return configs.toString();
