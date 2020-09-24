@@ -29,7 +29,7 @@ public class ConfigManager {
 		Config[] configList = this.configs.values().toArray(new Config[0]);
 		for (int i = 0; i < configList.length; i++) {
 			configs.append(configList[i].getConfigName());
-			if (i < configList.length) configs.append(", ");
+			if (configList.length > i + 1) configs.append(", ");
 		}
 		return configs.toString();
 	}
