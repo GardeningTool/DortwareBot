@@ -1,26 +1,18 @@
 package com.dortwaredevs.bot.permission;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import lombok.Getter;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.Getter;
-
-/**
- * @author Gardening_Tool
- */
 @Getter
 public class PermissionUser {
 	
 	private long userId;
 	private File file;
 	private List<String> permissions;
-	private static final File DIRECTORY = new File("users" + File.separator);
+	private static final File DIRECTORY = new File("permissionusers" + File.separator);
 	
 	public PermissionUser(long userId) {
 		this(new File(DIRECTORY + "\\" + userId + ".user"));
@@ -35,7 +27,7 @@ public class PermissionUser {
 				exc.printStackTrace();
 			}
 		}
-		this.userId = Long.valueOf(file.getName().replace(".user", ""));
+		this.userId = Long.parseLong(file.getName().replace(".user", ""));
 		permissions = new ArrayList<>();
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -62,14 +54,11 @@ public class PermissionUser {
 		permissions.remove(permission);
 		update();
 	}
-	
+
 	public void update() {
 		new Thread(() -> {
 			try {
-				//Deleting and creating a new file to remove the contents
-				file.delete();
-				file.createNewFile();
-				BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+				BufferedWriter writer = new BufferedWriter(new FileWriter(file, false));
 				permissions.forEach(perm -> {
 					try {
 						writer.write(perm + "\n");
