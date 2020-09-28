@@ -14,7 +14,7 @@ public class LevelTracker {
      * when a user runs the xp leaderboard command) and, if it were stored on the disk
      * instead of system memory, it would take longer to give a response.
      */
-    private volatile HashMap<Long, Integer> xp;
+    private HashMap<Long, Integer> xp;
 
     /**
      * The file which XP data will be written to
