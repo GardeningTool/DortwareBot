@@ -75,7 +75,6 @@ public class LevelTracker {
      */
     public int getLevel(long user) {
         long xp = this.xp.getOrDefault(user, 0);
-        if (xp == 0) return 0;
         return (int) xp / 100;
     }
 
