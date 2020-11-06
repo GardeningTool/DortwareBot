@@ -11,7 +11,7 @@ import net.dv8tion.jda.api.entities.User;
 public class ServerMessageEvent extends Event {
 
     /**
-     * THe user who sent the message
+     * The user who sent the message
      */
     private User sender;
 
