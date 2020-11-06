@@ -32,7 +32,7 @@ public class ConfigCommand implements ICommand {
         try {
             channel.sendMessage(bot.getConfigManager().getConfig(server).buildMessage()).submit();
         } catch (NullPointerException exc) {
-            channel.sendMessage(MessageUtil.message("Invalid config!")).submit();
+            channel.sendMessage(MessageUtil.message("❌ That is not a valid configuration!")).submit();
         }
 
     }
