@@ -65,7 +65,7 @@ public class Bot {
 	/**
 	 * The bot status
 	 */
-	private final String STATUS = "Buy dortware on https://intent.store!";
+	private final String STATUS = "Balli obfuscate Dortware on intent.store";
 
 	public Bot() throws LoginException, IOException 
 	{
