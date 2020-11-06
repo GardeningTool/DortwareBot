@@ -34,9 +34,9 @@ public class PermissionRemoveCommand implements ICommand {
             PermissionUser permissionUser = bot.getPermissionManager().getUser(id);
             String permission = args[2];
             permissionUser.removePermission(permission);
-            channel.sendMessage(MessageUtil.formattedMessage(new Color(66, 135, 245), "Success", null, "Removed " + permission + " from <@" + id + ">'s permissions")).submit();
+            channel.sendMessage(MessageUtil.formattedMessage(new Color(66, 135, 245), "Success", null, "Removed the permission " + permission + " from <@" + id + ">'s permissions")).submit();
         } catch (Exception exc) {
-            channel.sendMessage(MessageUtil.formattedMessage(new Color(66, 135, 245), "Improper usage!", null,  "Improper usage! Try -removeperm (id) (permission)")).submit();
+            channel.sendMessage(MessageUtil.formattedMessage(new Color(66, 135, 245), "❌ Improper usage!", null,  "Improper usage! Correct Usage: -removeperm (id) (permission)")).submit();
         }
     }
 }
