@@ -27,16 +27,16 @@ public class MediaCommand implements ICommand {
     @Override
     public void onCommand(String[] args, User user, TextChannel channel) {
         if (!isAdmin(channel, user) && !bot.getPermissionManager().getUser(user.getIdLong()).hasPermission("media.add")) {
-            channel.sendMessage(MessageUtil.formattedMessage(new Color(3, 252, 182), "Insufficient permission!", null, "You don't have permissiono to do this!")).submit();
+            channel.sendMessage(MessageUtil.formattedMessage(new Color(3, 252, 182), "Insufficient permission!", null, "You don't have permission to do this!")).submit();
             return;
         }
         if (args.length != 2) {
-            channel.sendMessage(MessageUtil.formattedMessage(new Color(3, 252, 182), "Improper usage!", null, "Improper usage!\nTry -addmedia (link)")).submit();
+            channel.sendMessage(MessageUtil.formattedMessage(new Color(3, 252, 182), "Improper usage!", null, "Improper usage!\nCorrect Usage: -addmedia (link)")).submit();
             return;
         }
         for (TextChannel tch : channel.getGuild().getTextChannels()) {
             if (tch.getName().contains("media")) {
-                tch.sendMessage(MessageUtil.message("<@" + user.getIdLong() + "> uploaded!\n" + args[1])).submit();
+                tch.sendMessage(MessageUtil.message("<@" + user.getIdLong() + "> sumbitted a video!\n" + args[1])).submit();
                 channel.sendMessage(MessageUtil.formattedMessage(new Color(3, 252, 182), null, null, "Media posted!")).submit();
                 return;
             }
