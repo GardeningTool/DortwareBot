@@ -23,7 +23,7 @@ public class LeaderboardCommand implements ICommand {
 
     @Override
     public String getDescription() {
-        return "Gets the users with the highest XP";
+        return "Returns the user with the Highest Level and XP";
     }
 
     @Override
