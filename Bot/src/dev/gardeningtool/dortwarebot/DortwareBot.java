@@ -28,7 +28,7 @@ public class DortwareBot {
 
         long time = System.currentTimeMillis();
 
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(this);
         dortwareConfiguration = new DortwareConfiguration();
         betaDownloadManager = new BetaDownloadManager();
         eventBus = new EventBus(this);

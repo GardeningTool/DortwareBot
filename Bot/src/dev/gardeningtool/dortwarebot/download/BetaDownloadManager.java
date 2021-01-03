@@ -1,14 +1,11 @@
 package dev.gardeningtool.dortwarebot.download;
 
-import dev.gardeningtool.dortwarebot.event.impl.EventPrivateMessageReceived;
-import dev.gardeningtool.dortwarebot.util.MessageUtil;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.PrivateChannel;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.utils.AttachmentOption;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -22,6 +19,15 @@ public class BetaDownloadManager {
 
     public BetaDownloadManager() {
         allowedIDs = new ArrayList<>();
+        betaUploadQueue = new LinkedList<>();
+        betaFile = new File("Config/Dortware-Beta.jar");
+        if (!betaFile.exists()) {
+            try {
+                betaFile.createNewFile();
+            } catch (IOException exc) {
+                exc.printStackTrace();
+            }
+        }
         if (!(directory = new File("Config/")).isDirectory()) {
             directory.mkdir();
         }
@@ -47,9 +53,11 @@ public class BetaDownloadManager {
             exc.printStackTrace();
         }
         new Thread(() -> {
-            while (!betaUploadQueue.isEmpty()) {
-                User user = betaUploadQueue.poll();
-                user.openPrivateChannel().complete().sendFile(betaFile).submit();
+            while (true) {
+                if (!betaUploadQueue.isEmpty()) {
+                    User user = betaUploadQueue.poll();
+                    user.openPrivateChannel().complete().sendFile(betaFile).submit();
+                }
             }
         }).start();
     }
@@ -57,6 +65,10 @@ public class BetaDownloadManager {
     public void addToBeta(User user) {
         allowedIDs.add(user.getIdLong());
         write();
+    }
+
+    public void updateFile() {
+        betaFile = new File("Config/Dortware-Beta.jar");
     }
 
     private void write() {
@@ -85,11 +97,11 @@ public class BetaDownloadManager {
     public void requestBeta(User user) {
         PrivateChannel privateChannel = user.openPrivateChannel().complete();
         if (!allowedIDs.contains(user.getIdLong())) {
-            privateChannel.sendMessage(":x: You aren't a beta tester!");
+            privateChannel.sendMessage(":x: You aren't a beta tester!").complete();
             return;
         }
         betaUploadQueue.add(user);
-        privateChannel.sendMessage(":clock: Please wait while we upload the latest beta. You're currently position " +
-                betaUploadQueue.size() + "/" + betaUploadQueue.size() + " in the queue.");
+        privateChannel.sendMessage(":alarm_clock: Please wait while we upload the latest beta. You're currently position " +
+                betaUploadQueue.size() + "/" + betaUploadQueue.size() + " in the queue.").complete();
     }
 }

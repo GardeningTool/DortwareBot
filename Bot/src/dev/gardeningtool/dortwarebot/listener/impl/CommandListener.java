@@ -28,7 +28,8 @@ public class CommandListener extends Listener {
 
     private void checkIfValid(User user, String rawMessage, TextChannel textChannel) {
         if (user.isBot() || !rawMessage.startsWith("?")) return;
-        String[] args = rawMessage.contains(" ") ? rawMessage.split(" ") : new String[]{};
+        String[] args = rawMessage.contains(" ") ? rawMessage.split(" ") : new String[]{rawMessage};
+        commandManager.onCommand(args[0].replace("?", ""), user, args, textChannel);
 
     }
 }

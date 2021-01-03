@@ -5,17 +5,14 @@ import dev.gardeningtool.dortwarebot.listener.EventHandler;
 import dev.gardeningtool.dortwarebot.listener.Listener;
 import dev.gardeningtool.dortwarebot.listener.TestListener;
 import dev.gardeningtool.dortwarebot.listener.impl.CommandListener;
-import net.dv8tion.jda.api.JDA;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Stream;
 
 public class EventBus {
 
-    private JDA jda;
-    private Queue<Event> eventQueue;
+    private Deque<Event> eventQueue;
     private HashMap<Listener, Class<? extends Listener>> listeners;
 
     public EventBus(DortwareBot dortwareBot) {
@@ -24,21 +21,23 @@ public class EventBus {
         listeners.put(new CommandListener(dortwareBot.getCommandManager()), CommandListener.class);
         listeners.put(new TestListener(), TestListener.class);
         new Thread(() -> {
-            while(!eventQueue.isEmpty()) {
-                Event event = eventQueue.poll();
-                Class<? extends Event> eventClazz = event.getClass();
-                for (Map.Entry<Listener, Class<? extends Listener>> entry : listeners.entrySet()) {
-                    Listener listener = entry.getKey();
-                    Class<? extends Listener> clazz = entry.getValue();
-                    Stream.of(clazz.getMethods()).filter(method -> method.isAnnotationPresent(EventHandler.class) &&
-                            method.getParameterCount() == 1 &&
-                            method.getParameterTypes()[0].equals(eventClazz)).forEach(method -> {
-                                try {
-                                    method.invoke(listener, event);
-                                } catch (InvocationTargetException | IllegalAccessException exc) {
-                                    exc.printStackTrace();
-                                }
-                    });
+            while(true) {
+                if (!eventQueue.isEmpty()) {
+                    Event event = eventQueue.poll();
+                    Class<? extends Event> eventClazz = event.getClass();
+                    for (Map.Entry<Listener, Class<? extends Listener>> entry : listeners.entrySet()) {
+                        Listener listener = entry.getKey();
+                        Class<? extends Listener> clazz = entry.getValue();
+                        Stream.of(clazz.getMethods()).filter(method -> method.isAnnotationPresent(EventHandler.class) &&
+                                method.getParameterCount() == 1 &&
+                                method.getParameterTypes()[0].equals(eventClazz)).forEach(method -> {
+                            try {
+                                method.invoke(listener, event);
+                            } catch (InvocationTargetException | IllegalAccessException exc) {
+                                exc.printStackTrace();
+                            }
+                        });
+                    }
                 }
             }
         }).start();
